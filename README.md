@@ -2,7 +2,7 @@
 > React local picker with Google Maps API integration
 
 ## Install
-```
+```bash
 npm install react-local-picker --save
 // or
 yarn add react-local-picker --save
@@ -10,11 +10,11 @@ yarn add react-local-picker --save
 
 ## Getting Started
 Putting your google API script tag in index.html.
-```
+```html
 <script src="https://maps.googleapis.com/maps/api/js?key=[YOUR_API_KEY_HERE]&libraries=places"></script>
 ```
 ## Usage Example
-```
+```javascript
 import React from 'react';
 import { LocalPicker, GoogleMapsAdapter } from 'react-local-picker'
 
