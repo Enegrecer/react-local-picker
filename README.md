@@ -1,6 +1,8 @@
 # react-local-picker
 > React local picker with Google Maps API integration
 
+[![Build Status](https://travis-ci.org/Enegrecer/react-local-picker.svg?branch=master)](https://travis-ci.org/Enegrecer/react-local-picker)
+
 ## Install
 ```bash
 npm install react-local-picker --save
