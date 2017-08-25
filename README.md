@@ -1,7 +1,7 @@
 # react-local-picker
 > React local picker with Google Maps API integration
 
-[![Build Status](https://travis-ci.org/Enegrecer/react-local-picker.svg?branch=master)](https://travis-ci.org/Enegrecer/react-local-picker)
+[![Build Status](https://travis-ci.org/Enegrecer/react-local-picker.svg?branch=master)](https://travis-ci.org/Enegrecer/react-local-picker) [![Coverage Status](https://coveralls.io/repos/github/Enegrecer/react-local-picker/badge.svg?branch=master)](https://coveralls.io/github/Enegrecer/react-local-picker?branch=master)
 
 ## Install
 ```bash
