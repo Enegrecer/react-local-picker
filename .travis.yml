@@ -15,5 +15,11 @@ cache:
     - ".eslintcache"
     - "node_modules"
 
-script:
-  - yarn run test -- --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+jobs:
+  include:
+    - stage: coverage
+      script:
+        - yarn run test -- --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+    - stage: demo
+      script:
+        - yarn run publish:demo
