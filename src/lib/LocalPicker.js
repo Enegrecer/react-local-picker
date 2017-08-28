@@ -55,7 +55,6 @@ LocalPicker.propTypes = {
     lng: PropTypes.number.isRequired
   }).isRequired,
   height: PropTypes.number,
-  loadingText: PropTypes.string.isRequired,
   inputPlaceholder: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   containerSyle: PropTypes.object,
