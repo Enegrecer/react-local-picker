@@ -1,7 +1,7 @@
 import * as GoogleMapsAdapter from './GoogleMapsAdapter'
-import googleMapsAPIMock from './__mocks__/googleMapsAPIMock'
+import googleMock from './__mocks__/google'
 
-window.google = googleMapsAPIMock
+window.google = googleMock
 
 describe('GoogleMapsAdapter', () => {
   const onChangeSpy = jest.fn()
@@ -17,10 +17,6 @@ describe('GoogleMapsAdapter', () => {
     }
   }
 
-  beforeAll(() => {
-    window.google = googleMapsAPIMock
-  })
-
   describe('when init', () => {
     it('works', () => {
       expect(GoogleMapsAdapter.init(
@@ -33,23 +29,23 @@ describe('GoogleMapsAdapter', () => {
     })
 
     it('creates map', () => {
-      expect(googleMapsAPIMock.maps.Map).toBeCalledWith(mapContainer, { zoom: 10 })
+      expect(window.google.maps.Map).toBeCalledWith(mapContainer, { zoom: 10 })
     })
 
     it('creates autocomplete', () => {
-      expect(googleMapsAPIMock.maps.places.Autocomplete).toBeCalledWith(input, { types: ['geocode'] })
+      expect(window.google.maps.places.Autocomplete).toBeCalledWith(input, { types: ['geocode'] })
     })
 
     it('creates marker in correct position and map', () => {
-      const map = googleMapsAPIMock.maps.Map.mock.instances[0]
+      const map = window.google.maps.Map.mock.instances[0]
       const position = { lat: 11, lng: 11 }
 
-      expect(googleMapsAPIMock.maps.Marker).toBeCalledWith({ position, map })
+      expect(window.google.maps.Marker).toBeCalledWith({ position, map })
     })
 
     it('centralizes the map by marker', () => {
-      const map = googleMapsAPIMock.maps.Map.mock.instances[0]
-      const marker = googleMapsAPIMock.maps.Marker.mock.instances[0]
+      const map = window.google.maps.Map.mock.instances[0]
+      const marker = window.google.maps.Marker.mock.instances[0]
 
       expect(map.setCenter).toBeCalledWith(marker.position)
     })
@@ -63,13 +59,13 @@ describe('GoogleMapsAdapter', () => {
 
   describe('when map is clicked', () => {
     beforeEach(() => {
-      googleMapsAPIMock.maps.event.trigger('click', {
+      window.google.maps.event.trigger('click', {
         latLng: { lat: 4, lng: 4 }
       })
     })
 
     it('changes marker position', () => {
-      const marker = googleMapsAPIMock.maps.Marker.mock.instances[0]
+      const marker = window.google.maps.Marker.mock.instances[0]
 
       expect(marker.setPosition).toBeCalledWith({ lat: 4, lng: 4 })
     })
@@ -85,22 +81,22 @@ describe('GoogleMapsAdapter', () => {
 
   describe('when search place', () => {
     beforeEach(() => {
-      googleMapsAPIMock.maps.event.trigger('place_changed', {
-        autocomplete: googleMapsAPIMock.maps.places.Autocomplete.mock.instances[0],
-        map: googleMapsAPIMock.maps.Map.mock.instances[0],
-        marker: googleMapsAPIMock.maps.Marker.mock.instances[0]
+      window.google.maps.event.trigger('place_changed', {
+        autocomplete: window.google.maps.places.Autocomplete.mock.instances[0],
+        map: window.google.maps.Map.mock.instances[0],
+        marker: window.google.maps.Marker.mock.instances[0]
       })
     })
 
     it('changes marker position', () => {
-      const marker = googleMapsAPIMock.maps.Marker.mock.instances[0]
+      const marker = window.google.maps.Marker.mock.instances[0]
 
       expect(marker.setPosition).toBeCalledWith({ lat: 5, lng: 5 })
     })
 
     it('centralizes the map', () => {
-      expect(googleMapsAPIMock.maps.Map.mock.instances[0].setCenter).toBeCalledWith(
-        googleMapsAPIMock.maps.Marker.mock.instances[0].position
+      expect(window.google.maps.Map.mock.instances[0].setCenter).toBeCalledWith(
+        window.google.maps.Marker.mock.instances[0].position
       )
     })
 

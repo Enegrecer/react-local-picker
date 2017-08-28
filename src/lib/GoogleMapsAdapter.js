@@ -49,7 +49,7 @@ function changeMarkerPosition(marker, position, onChange) {
 }
 
 function updateAddress(position, input, loadingText) {
-  const geocoder = new window.google.maps.Geocoder
+  const geocoder = new window.google.maps.Geocoder()
 
   input.value = loadingText
 

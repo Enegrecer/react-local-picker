@@ -1,15 +1,15 @@
-const googleMapsAPIMock = {
+const google = {
   maps: {
     events: {},
     event: {
       trigger: (eventName, event) => {
-        googleMapsAPIMock.maps.events[eventName](event)
+        google.maps.events[eventName](event)
       }
     },
     Map: jest.fn(function() {
       this.setCenter = jest.fn()
       this.addListener = (eventName, callback) => {
-        googleMapsAPIMock.maps.events[eventName] = callback
+        google.maps.events[eventName] = callback
       }
     }),
     LatLng: function(lat, lng) {
@@ -32,7 +32,7 @@ const googleMapsAPIMock = {
     places: {
       Autocomplete: jest.fn(function() {
         this.addListener = (eventName, callback) => {
-          googleMapsAPIMock.maps.events[eventName] = callback
+          google.maps.events[eventName] = callback
         }
         this.getPlace = () => {
           return {
@@ -49,4 +49,4 @@ const googleMapsAPIMock = {
   }
 }
 
-export default googleMapsAPIMock
+export default google
