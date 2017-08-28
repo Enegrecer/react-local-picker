@@ -2,6 +2,7 @@
   "name": "react-local-picker",
   "version": "0.1.0",
   "main": "lib/index.js",
+  "homepage": "https://enegrecer.github.io/react-local-picker",
   "files": [
     "lib/",
     "src/lib",
