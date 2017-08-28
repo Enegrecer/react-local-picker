@@ -29,7 +29,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lib": "NODE_ENV=production babel src/lib --out-dir lib --ignore spec.js",
-    "publish:demo": "yarn run build && gh-pages -d ./src/demo"
+    "publish:demo": "yarn run build && gh-pages -d ./build"
   },
   "jest": {
     "collectCoverageFrom": [
