@@ -48,26 +48,26 @@ export default SomePage;
 ```
 ## Component API
 ### adapter : Object
-Receives a Map Api Service. In the moment the GoogleMapsAdapter is the only one. But, if do you want create other adapters to other services you are welcome ([read this section about write an adapter](#write-an-adapter)).
+Receives a Map Api Service. At the moment, the GoogleMapsAdapter is the only one available. But, if you want create other adapters to other services you are very welcome ([read this section about write an adapter](#write-an-adapter)).
 ### value : Object
-A value receives an object with lat and lng attributes that indicates de initial marker position on the map.
+A value receives an object with lat and lng attributes that indicates the initial marker position on the map.
 ### onChange(value : Oject) : Function
 Returns the new position of marker.
 ### inputPlaceholder : String
-The text that will be display in input search.
+The text that will be displayed in the input search.
 ### adapterConfig : Object
-Adapter configurations. You can see below the correct configuration to your adapter.
+Adapter settings. You can see below the correct configuration to your adapter.
 
 ## GoogleMapsAdapter Options
 ### map : Object
-Is used to set some google maps api default options that you can be [seen here](https://developers.google.com/maps/documentation/javascript/).
+It’s used to set some google maps api default options that can be [seen here](https://developers.google.com/maps/documentation/javascript/).
 ### text : Object
-Is used to store the text configs.
+It’s used to store the text configs.
 ### text.loadingText : String
-Is displayed when the component is loading the full adress from Google API.
+It’s displayed when the component is loading the full address from Google API.
 
 ## Write an Adapter
-To write an Adapter you just need export an init function that will receive this props in sort. You can see how the [GoogleMapsAdapter](https://github.com/Enegrecer/react-local-picker/blob/master/src/lib/GoogleMapsAdapter.js) works.
+To write an Adapter you just need to export an init function that will receive this props in sort. You can see how the [GoogleMapsAdapter](https://github.com/Enegrecer/react-local-picker/blob/master/src/lib/GoogleMapsAdapter.js) works.
 - value
 - mapContainer
 - searchInput
@@ -75,12 +75,12 @@ To write an Adapter you just need export an init function that will receive this
 - config
 
 ### value : Object
-A value receives an object with lat and lng attributes that indicates de initial marker position on the map.
+A value receives an object with lat and lng attributes that indicates the initial marker position on the map.
 ### mapContainer : Object
-It is a DOM reference from the map container/wrapper.
+It is a DOM reference to the map container/wrapper.
 ### searchInput : Object
-It is a DOM reference from the search input.
+It is a DOM reference to the search input.
 ### onChange(value : Oject) : Function
 Needs be called after any marker position changes and returns the new position.
 ### config : Object
-Any configuration that your adapter will need to works.
+Any additional configuration that your adapter may need.
