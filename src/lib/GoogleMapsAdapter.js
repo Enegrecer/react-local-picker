@@ -28,7 +28,7 @@ function createMap(mapContainer, config) {
 function createAutoComplete(input) {
   return new window.google.maps.places.Autocomplete(
     input,
-    { types: ['geocode'] }
+    { types: ['address'] }
   )
 }
 

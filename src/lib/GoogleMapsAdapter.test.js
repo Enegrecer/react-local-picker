@@ -33,7 +33,7 @@ describe('GoogleMapsAdapter', () => {
     })
 
     it('creates autocomplete', () => {
-      expect(window.google.maps.places.Autocomplete).toBeCalledWith(input, { types: ['geocode'] })
+      expect(window.google.maps.places.Autocomplete).toBeCalledWith(input, { types: ['address'] })
     })
 
     it('creates marker in correct position and map', () => {
