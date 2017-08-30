@@ -3,6 +3,13 @@ import googleMock from './__mocks__/google'
 
 window.google = googleMock
 
+function clearAllMockFn() {
+  window.google.maps.Map.mockClear()
+  window.google.maps.Marker.mockClear()
+  window.google.maps.Geocoder.mockClear()
+  window.google.maps.places.Autocomplete.mockClear()
+}
+
 describe('GoogleMapsAdapter', () => {
   const onChangeSpy = jest.fn()
   const value = { lat: 11, lng: 11 }
@@ -59,6 +66,14 @@ describe('GoogleMapsAdapter', () => {
 
   describe('when map is clicked', () => {
     beforeEach(() => {
+      clearAllMockFn()
+      GoogleMapsAdapter.init(
+        value,
+        mapContainer,
+        input,
+        onChangeSpy,
+        adapterConfig
+      )
       window.google.maps.event.trigger('click', {
         latLng: { lat: 4, lng: 4 }
       })
@@ -75,12 +90,26 @@ describe('GoogleMapsAdapter', () => {
     })
 
     it('calls onChange with new position value', () => {
-      expect(onChangeSpy).toBeCalledWith({ lat: 4, lng: 4 })
+      const expectedPosition = { 
+        lat: 5, 
+        lng: 5,
+        addressComponents: []
+      }
+
+      expect(onChangeSpy).toBeCalledWith(expectedPosition)
     })
   })
 
   describe('when search place', () => {
     beforeEach(() => {
+      clearAllMockFn()
+      GoogleMapsAdapter.init(
+        value,
+        mapContainer,
+        input,
+        onChangeSpy,
+        adapterConfig
+      )
       window.google.maps.event.trigger('place_changed', {
         autocomplete: window.google.maps.places.Autocomplete.mock.instances[0],
         map: window.google.maps.Map.mock.instances[0],
@@ -90,8 +119,9 @@ describe('GoogleMapsAdapter', () => {
 
     it('changes marker position', () => {
       const marker = window.google.maps.Marker.mock.instances[0]
-
-      expect(marker.setPosition).toBeCalledWith({ lat: 5, lng: 5 })
+      
+      expect(marker.setPosition.mock.calls[0][0].lat()).toBe(5)
+      expect(marker.setPosition.mock.calls[0][0].lng()).toBe(5)
     })
 
     it('centralizes the map', () => {
@@ -101,7 +131,13 @@ describe('GoogleMapsAdapter', () => {
     })
 
     it('calls onChange with new position value', () => {
-      expect(onChangeSpy).toBeCalledWith({ lat: 5, lng: 5 })
+      const expectedPosition = { 
+        lat: 5, 
+        lng: 5,
+        addressComponents: []
+      }
+
+      expect(onChangeSpy).toBeCalledWith(expectedPosition)
     })
   })
 })

@@ -22,7 +22,16 @@ const google = {
       return {
         geocode: (location, callback) => {
           const results = [
-            { formatted_address: 'Belo Horizonte - MG' }
+            { 
+              formatted_address: 'Belo Horizonte - MG',
+              geometry: {
+                location: {
+                  lat: jest.fn(() => 5),
+                  lng: jest.fn(() => 5)
+                }
+              },
+              address_components: []
+            }
           ]
 
           callback(results)
@@ -38,10 +47,11 @@ const google = {
           return {
             geometry: {
               location: {
-                lat: 5,
-                lng: 5
+                lat: jest.fn(() => 5),
+                lng: jest.fn(() => 5)
               }
-            }
+            },
+            address_components: []
           }
         }
       })
