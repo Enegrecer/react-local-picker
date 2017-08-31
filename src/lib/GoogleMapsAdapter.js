@@ -10,7 +10,7 @@ export function init(value, mapContainer, searchInput, onChange, config) {
     updateAddressAndFireOnChange(event.latLng, searchInput, config.text.loadingText, onChange)
   })
 
-  autocomplete.addListener('place_changed', event => {
+  autocomplete.addListener('place_changed', () => {
     const newPlace = autocomplete.getPlace()
 
     if (newPlace.geometry && newPlace.address_components) {
