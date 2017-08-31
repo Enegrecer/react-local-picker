@@ -98,6 +98,7 @@ describe('GoogleMapsAdapter', () => {
   describe('when map is clicked', () => {
     beforeEach(() => {
       clearAllMockFn()
+      onChangeSpy.mockClear()
       GoogleMapsAdapter.init(
         value,
         mapContainer,
@@ -134,6 +135,7 @@ describe('GoogleMapsAdapter', () => {
   describe('when search place', () => {
     beforeEach(() => {
       clearAllMockFn()
+      onChangeSpy.mockClear()
       GoogleMapsAdapter.init(
         value,
         mapContainer,
@@ -141,11 +143,7 @@ describe('GoogleMapsAdapter', () => {
         onChangeSpy,
         adapterConfig
       )
-      fireEventInsideMaps('place_changed', {
-        autocomplete: getAutocompleteMockInstance(),
-        map: getMapMockInstance(),
-        marker: getMarkerMockInstance()
-      })
+      fireEventInsideMaps('place_changed', null)
     })
 
     it('changes marker position', () => {
@@ -170,6 +168,47 @@ describe('GoogleMapsAdapter', () => {
       }
 
       expect(onChangeSpy).toBeCalledWith(expectedPosition)
+    })
+  })
+
+  describe('when searching for a place does not return any results from google', () => {
+    beforeEach(() => {
+      clearAllMockFn()
+      onChangeSpy.mockClear()
+      GoogleMapsAdapter.init(
+        value,
+        mapContainer,
+        input,
+        onChangeSpy,
+        adapterConfig
+      )
+
+      getAutocompleteMockInstance().getPlace = () => ({});
+
+      fireEventInsideMaps('place_changed', null)
+    })
+
+    it('does not change the marker position', () => {
+      const marker = getMarkerMockInstance()
+
+      expect(marker.setPosition).not.toHaveBeenCalled()
+    })
+
+    it('does not centralize the map', () => {
+      const map = getMapMockInstance()
+      const marker = getMarkerMockInstance()
+
+      expect(map.setCenter).toHaveBeenCalledTimes(1)
+    })
+
+    it('does not call onChange with new position value', () => {
+      const expectedPosition = {
+        lat: 5,
+        lng: 5,
+        addressComponents: []
+      }
+
+      expect(onChangeSpy).not.toHaveBeenCalled()
     })
   })
 })
