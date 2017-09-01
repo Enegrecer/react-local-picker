@@ -55,7 +55,7 @@ function fireOnChangeEvent(latLng, addressComponents, onChange) {
   const eventValue = {
     lat: latLng.lat(),
     lng: latLng.lng(),
-    addressComponents
+    address: addressComponents
   }
   onChange(eventValue)
 }

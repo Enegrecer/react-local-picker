@@ -125,7 +125,7 @@ describe('GoogleMapsAdapter', () => {
       const expectedPosition = {
         lat: 5,
         lng: 5,
-        addressComponents: []
+        address: []
       }
 
       expect(onChangeSpy).toBeCalledWith(expectedPosition)
@@ -164,7 +164,7 @@ describe('GoogleMapsAdapter', () => {
       const expectedPosition = {
         lat: 5,
         lng: 5,
-        addressComponents: []
+        address: []
       }
 
       expect(onChangeSpy).toBeCalledWith(expectedPosition)
@@ -205,7 +205,7 @@ describe('GoogleMapsAdapter', () => {
       const expectedPosition = {
         lat: 5,
         lng: 5,
-        addressComponents: []
+        address: []
       }
 
       expect(onChangeSpy).not.toHaveBeenCalled()
