@@ -12,8 +12,9 @@ export function init(value, mapContainer, searchInput, onChange, config) {
 
   autocomplete.addListener('place_changed', () => {
     const newPlace = autocomplete.getPlace()
+    const validPlaceFound = newPlace.geometry && newPlace.address_components
 
-    if (newPlace.geometry && newPlace.address_components) {
+    if (validPlaceFound) {
       changeMarkerPosition(marker, newPlace.geometry.location)
       centerMapInMarker(map, marker)
       fireOnChangeEvent(newPlace.geometry.location, newPlace.address_components, onChange)
