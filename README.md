@@ -52,11 +52,13 @@ Receives a Map Api Service. At the moment, the GoogleMapsAdapter is the only one
 ### value : Object
 A value receives an object with lat and lng attributes that indicates the initial marker position on the map.
 ### onChange(value : Oject) : Function
-Returns the new position of marker.
+Returns the new position of marker and closest address.
 ### inputPlaceholder : String
 The text that will be displayed in the input search.
 ### adapterConfig : Object
 Adapter settings. You can see below the correct configuration to your adapter.
+### map : Boolean
+Displays the map or not. Default: true.
 
 ## GoogleMapsAdapter Options
 ### map : Object
