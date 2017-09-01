@@ -1,4 +1,25 @@
 export function init(value, mapContainer, searchInput, onChange, config) {
+  if (mapContainer) {
+    initWithMap(value, mapContainer, searchInput, onChange, config)
+  } else {
+    initAutocompleteOnly(value, searchInput, onChange, config)
+  }
+}
+
+function initAutocompleteOnly(value, searchInput, onChange, config) {
+  const autocomplete = createAutoComplete(searchInput)
+
+  autocomplete.addListener('place_changed', () => {
+    const newPlace = autocomplete.getPlace()
+    const validPlaceFound = newPlace.geometry && newPlace.address_components
+
+    if (validPlaceFound) {
+      fireOnChangeEvent(newPlace.geometry.location, newPlace.address_components, onChange)
+    }
+  })
+}
+
+function initWithMap(value, mapContainer, searchInput, onChange, config) {
   const map = createMap(mapContainer, config.map)
   const marker = createMarker(value, map)
   const autocomplete = createAutoComplete(searchInput)
