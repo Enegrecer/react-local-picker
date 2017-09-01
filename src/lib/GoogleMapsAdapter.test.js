@@ -3,41 +3,6 @@ import googleMock from './__mocks__/google'
 
 window.google = googleMock
 
-function clearAllMockFn() {
-  window.google.maps.Map.mockClear()
-  window.google.maps.Marker.mockClear()
-  window.google.maps.Geocoder.mockClear()
-  window.google.maps.places.Autocomplete.mockClear()
-}
-
-function getMapMockInstance() {
-  return getMap().mock.instances[0]
-}
-
-function getMarkerMockInstance() {
-  return getMarker().mock.instances[0]
-}
-
-function getAutocompleteMockInstance() {
-  return getAutocomplete().mock.instances[0]
-}
-
-function getMap() {
-  return window.google.maps.Map
-}
-
-function getAutocomplete() {
-  return window.google.maps.places.Autocomplete
-}
-
-function getMarker() {
-  return window.google.maps.Marker
-}
-
-function fireEventInsideMaps(eventName, value) {
-  window.google.maps.event.trigger(eventName, value)
-}
-
 describe('GoogleMapsAdapter', () => {
   const onChangeSpy = jest.fn()
   const value = { lat: 11, lng: 11 }
@@ -212,3 +177,38 @@ describe('GoogleMapsAdapter', () => {
     })
   })
 })
+
+function clearAllMockFn() {
+  window.google.maps.Map.mockClear()
+  window.google.maps.Marker.mockClear()
+  window.google.maps.Geocoder.mockClear()
+  window.google.maps.places.Autocomplete.mockClear()
+}
+
+function getMapMockInstance() {
+  return getMap().mock.instances[0]
+}
+
+function getMarkerMockInstance() {
+  return getMarker().mock.instances[0]
+}
+
+function getAutocompleteMockInstance() {
+  return getAutocomplete().mock.instances[0]
+}
+
+function getMap() {
+  return window.google.maps.Map
+}
+
+function getAutocomplete() {
+  return window.google.maps.places.Autocomplete
+}
+
+function getMarker() {
+  return window.google.maps.Marker
+}
+
+function fireEventInsideMaps(eventName, value) {
+  window.google.maps.event.trigger(eventName, value)
+}
