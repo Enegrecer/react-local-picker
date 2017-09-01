@@ -3,6 +3,41 @@ import googleMock from './__mocks__/google'
 
 window.google = googleMock
 
+function clearAllMockFn() {
+  window.google.maps.Map.mockClear()
+  window.google.maps.Marker.mockClear()
+  window.google.maps.Geocoder.mockClear()
+  window.google.maps.places.Autocomplete.mockClear()
+}
+
+function getMapMockInstance() {
+  return getMap().mock.instances[0]
+}
+
+function getMarkerMockInstance() {
+  return getMarker().mock.instances[0]
+}
+
+function getAutocompleteMockInstance() {
+  return getAutocomplete().mock.instances[0]
+}
+
+function getMap() {
+  return window.google.maps.Map
+}
+
+function getAutocomplete() {
+  return window.google.maps.places.Autocomplete
+}
+
+function getMarker() {
+  return window.google.maps.Marker
+}
+
+function fireEventInsideMaps(eventName, value) {
+  window.google.maps.event.trigger(eventName, value)
+}
+
 describe('GoogleMapsAdapter', () => {
   const onChangeSpy = jest.fn()
   const value = { lat: 11, lng: 11 }
@@ -29,23 +64,26 @@ describe('GoogleMapsAdapter', () => {
     })
 
     it('creates map', () => {
-      expect(window.google.maps.Map).toBeCalledWith(mapContainer, { zoom: 10 })
+      const map = getMap()
+      expect(map).toBeCalledWith(mapContainer, { zoom: 10 })
     })
 
     it('creates autocomplete', () => {
-      expect(window.google.maps.places.Autocomplete).toBeCalledWith(input, { types: ['geocode'] })
+      const autocomplete = getAutocomplete()
+      expect(autocomplete).toBeCalledWith(input, { types: ['address'] })
     })
 
     it('creates marker in correct position and map', () => {
-      const map = window.google.maps.Map.mock.instances[0]
+      const map = getMapMockInstance()
+      const marker = getMarker()
       const position = { lat: 11, lng: 11 }
 
-      expect(window.google.maps.Marker).toBeCalledWith({ position, map })
+      expect(marker).toBeCalledWith({ position, map })
     })
 
     it('centralizes the map by marker', () => {
-      const map = window.google.maps.Map.mock.instances[0]
-      const marker = window.google.maps.Marker.mock.instances[0]
+      const map = getMapMockInstance()
+      const marker = getMarkerMockInstance()
 
       expect(map.setCenter).toBeCalledWith(marker.position)
     })
@@ -59,13 +97,22 @@ describe('GoogleMapsAdapter', () => {
 
   describe('when map is clicked', () => {
     beforeEach(() => {
-      window.google.maps.event.trigger('click', {
+      clearAllMockFn()
+      onChangeSpy.mockClear()
+      GoogleMapsAdapter.init(
+        value,
+        mapContainer,
+        input,
+        onChangeSpy,
+        adapterConfig
+      )
+      fireEventInsideMaps('click', {
         latLng: { lat: 4, lng: 4 }
       })
     })
 
     it('changes marker position', () => {
-      const marker = window.google.maps.Marker.mock.instances[0]
+      const marker = getMarkerMockInstance()
 
       expect(marker.setPosition).toBeCalledWith({ lat: 4, lng: 4 })
     })
@@ -75,33 +122,93 @@ describe('GoogleMapsAdapter', () => {
     })
 
     it('calls onChange with new position value', () => {
-      expect(onChangeSpy).toBeCalledWith({ lat: 4, lng: 4 })
+      const expectedPosition = {
+        lat: 5,
+        lng: 5,
+        address: []
+      }
+
+      expect(onChangeSpy).toBeCalledWith(expectedPosition)
     })
   })
 
   describe('when search place', () => {
     beforeEach(() => {
-      window.google.maps.event.trigger('place_changed', {
-        autocomplete: window.google.maps.places.Autocomplete.mock.instances[0],
-        map: window.google.maps.Map.mock.instances[0],
-        marker: window.google.maps.Marker.mock.instances[0]
-      })
+      clearAllMockFn()
+      onChangeSpy.mockClear()
+      GoogleMapsAdapter.init(
+        value,
+        mapContainer,
+        input,
+        onChangeSpy,
+        adapterConfig
+      )
+      fireEventInsideMaps('place_changed', null)
     })
 
     it('changes marker position', () => {
-      const marker = window.google.maps.Marker.mock.instances[0]
+      const marker = getMarkerMockInstance()
 
-      expect(marker.setPosition).toBeCalledWith({ lat: 5, lng: 5 })
+      expect(marker.setPosition.mock.calls[0][0].lat()).toBe(5)
+      expect(marker.setPosition.mock.calls[0][0].lng()).toBe(5)
     })
 
     it('centralizes the map', () => {
-      expect(window.google.maps.Map.mock.instances[0].setCenter).toBeCalledWith(
-        window.google.maps.Marker.mock.instances[0].position
-      )
+      const map = getMapMockInstance()
+      const marker = getMarkerMockInstance()
+
+      expect(map.setCenter).toBeCalledWith(marker.position)
     })
 
     it('calls onChange with new position value', () => {
-      expect(onChangeSpy).toBeCalledWith({ lat: 5, lng: 5 })
+      const expectedPosition = {
+        lat: 5,
+        lng: 5,
+        address: []
+      }
+
+      expect(onChangeSpy).toBeCalledWith(expectedPosition)
+    })
+  })
+
+  describe('when searching for a place does not return any results from google', () => {
+    beforeEach(() => {
+      clearAllMockFn()
+      onChangeSpy.mockClear()
+      GoogleMapsAdapter.init(
+        value,
+        mapContainer,
+        input,
+        onChangeSpy,
+        adapterConfig
+      )
+
+      getAutocompleteMockInstance().getPlace = () => ({});
+
+      fireEventInsideMaps('place_changed', null)
+    })
+
+    it('does not change the marker position', () => {
+      const marker = getMarkerMockInstance()
+
+      expect(marker.setPosition).not.toHaveBeenCalled()
+    })
+
+    it('does not centralize the map', () => {
+      const map = getMapMockInstance()
+      const marker = getMarkerMockInstance()
+
+      expect(map.setCenter).toHaveBeenCalledTimes(1)
+    })
+
+    it('does not call onChange with new position value', () => {
+      const expectedPosition = {
+        lat: 5,
+        lng: 5,
+        address: []
+      }
+
+      expect(onChangeSpy).not.toHaveBeenCalled()
     })
   })
 })
