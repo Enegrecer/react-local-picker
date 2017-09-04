@@ -40,10 +40,13 @@ class LocalPicker extends React.Component {
           placeholder={this.props.inputPlaceholder}
         />
 
-        <div
-          style={{ height: this.props.height }}
-          ref={mapContainer => this.mapContainer = mapContainer}
-        />
+        {
+          this.props.map &&
+          <div
+            style={{ height: this.props.height }}
+            ref={mapContainer => this.mapContainer = mapContainer}
+          />
+        }
       </div>
     )
   }
@@ -59,11 +62,13 @@ LocalPicker.propTypes = {
   onChange: PropTypes.func.isRequired,
   containerSyle: PropTypes.object,
   inputStyle: PropTypes.object,
-  adapterConfig: PropTypes.object
+  adapterConfig: PropTypes.object,
+  map: PropTypes.bool
 }
 
 LocalPicker.defaultProps = {
-  height: 300
+  height: 300,
+  map: true
 }
 
 export default LocalPicker
